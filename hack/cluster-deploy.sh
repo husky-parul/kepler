@@ -22,7 +22,7 @@ set -ex pipefail
 source cluster-up/common.sh
 
 CLUSTER_PROVIDER=${CLUSTER_PROVIDER:-kubernetes}
-MANIFESTS_OUT_DIR=${MANIFESTS_OUT_DIR:-"_output/manifests/${CLUSTER_PROVIDER}/generated"}
+MANIFESTS_OUT_DIR=${MANIFESTS_OUT_DIR:-"_output/generated-manifest"}
 
 function main() {
     [ ! -d "${MANIFESTS_OUT_DIR}" ] && echo "Directory ${MANIFESTS_OUT_DIR} DOES NOT exists. Run make generate first."
@@ -30,6 +30,9 @@ function main() {
     echo "Deploying manifests..."
 
     # Ignore errors because some clusters might not have prometheus operator
+    echo "Deploying with image:"
+    cat ${MANIFESTS_OUT_DIR}/deployment.yaml | grep "image:"
+
     kubectl apply -f ${MANIFESTS_OUT_DIR} || true
     
     # round for 3 times and each for 60s
