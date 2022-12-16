@@ -36,6 +36,10 @@ jobs:
               sha: context.sha
             })
       
+      - name: Create relesae artifacts # This would actually build your project, using zip for an example artifact
+        run: |
+          zip --junk-paths ${{ github.event.inputs.tag }}-kepler-${{ steps.date.outputs.date }}.zip . 
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
