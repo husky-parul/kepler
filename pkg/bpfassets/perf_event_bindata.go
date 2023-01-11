@@ -107,7 +107,7 @@ typedef struct pid_time_t
 } pid_time_t;
 
 // processes and pid time
-BPF_HASH(processes, u64, process_metrics_t);
+BPF_HASH(processes, u32, process_metrics_t);
 BPF_HASH(pid_time, pid_time_t);
 
 // perf counters
@@ -249,7 +249,9 @@ static inline u64 get_on_cpu_avg_freq(u32 *cpu_id, u64 on_cpu_cycles_delta, u64 
 // int kprobe__finish_task_switch(switch_args *ctx)
 int kprobe__finish_task_switch(struct pt_regs *ctx, struct task_struct *prev)
 {
-    u64 cur_pid = bpf_get_current_pid_tgid() >> 32;
+    // u64 cur_pid = bpf_get_current_pid_tgid() & 0xffffff;
+    struct task_struct *task = (struct task_struct *)bpf_get_current_task();
+    u32 cur_pid = task->tgid;
 #ifdef SET_GROUP_ID
     u64 cgroup_id = bpf_get_current_cgroup_id();
 #else
@@ -258,8 +260,8 @@ int kprobe__finish_task_switch(struct pt_regs *ctx, struct task_struct *prev)
 
     u64 cur_ts = bpf_ktime_get_ns();
     u32 cpu_id = bpf_get_smp_processor_id();
-    u64 prev_pid = prev->pid;
-    u64 on_cpu_time_delta = get_on_cpu_time(cur_pid, prev_pid, cpu_id, cur_ts);
+    u32 prev_tgid = prev->tgid;
+    u64 on_cpu_time_delta = get_on_cpu_time(cur_pid, prev_tgid, cpu_id, cur_ts);
     u64 on_cpu_cycles_delta = get_on_cpu_cycles(&cpu_id);
     u64 on_cpu_ref_cycles_delta = get_on_cpu_ref_cycles(&cpu_id);
     u64 on_cpu_instr_delta = get_on_cpu_instr(&cpu_id);
@@ -268,8 +270,22 @@ int kprobe__finish_task_switch(struct pt_regs *ctx, struct task_struct *prev)
 
     // store process metrics
     struct process_metrics_t *process_metrics;
-    process_metrics = processes.lookup(&prev_pid);
-    if (process_metrics != 0)
+    process_metrics = processes.lookup(&prev_tgid);
+    if (process_metrics == 0)
+    {
+        process_metrics_t new_process = {};
+        new_process.pid = cur_pid;
+        new_process.cgroup_id = cgroup_id;
+        new_process.process_run_time = on_cpu_time_delta;
+        bpf_get_current_comm(&new_process.comm, sizeof(new_process.comm));
+
+        new_process.cpu_cycles = on_cpu_cycles_delta;
+        new_process.cpu_instr = on_cpu_instr_delta;
+        new_process.cache_miss = on_cpu_cache_miss_delta;
+
+        processes.update(&cur_pid, &new_process);
+    }
+    else
     {
         // update process time
         process_metrics->process_run_time += on_cpu_time_delta;
