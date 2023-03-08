@@ -7,7 +7,7 @@ Summary:        Kepler Binary
 
 License:        Apache License 2.0
 URL:            https://github.com/sustainable-computing-io/kepler/
-Source0:        https://github.com/sustainable-computing-io/kepler/archive/refs/tags/%{_VERSION_}.tar.gz
+Source0:        https://github.com/husky-parul/kepler/archive/refs/tags/%{_VERSION_}.tar.gz
 
 
 
@@ -15,7 +15,6 @@ BuildRequires: gcc
 BuildRequires: systemd
 BuildRequires: make
 BuildRequires:  golang = 1.18
-
 
 Requires:       cpuid
 Requires:       kmod
