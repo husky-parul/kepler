@@ -14,6 +14,8 @@ Source0:        https://github.com/sustainable-computing-io/kepler/archive/refs/
 BuildRequires: gcc
 BuildRequires: systemd
 BuildRequires: make
+BuildRequires:  golang = 1.18
+
 
 Requires:       cpuid
 Requires:       kmod
@@ -28,7 +30,7 @@ Requires:       bcc
 Kubernetes-based Efficient Power Level Exporter
 
 # golang specifics
-%global golang_version 1.19
+%global golang_version 1.18
 
 %global debug_package %{nil} 
 %prep
