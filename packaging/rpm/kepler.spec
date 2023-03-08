@@ -1,5 +1,10 @@
 %undefine _disable_source_fetch
 
+# golang specifics
+%global golang_version 1.18
+
+%global debug_package %{nil} 
+
 Name:           kepler
 Version:        %{_VERSION_}
 Release:        %{_RELEASE_}
@@ -10,11 +15,10 @@ URL:            https://github.com/sustainable-computing-io/kepler/
 Source0:        https://github.com/husky-parul/kepler/archive/refs/tags/%{_VERSION_}.tar.gz
 
 
-
 BuildRequires: gcc
+BuildRequires: golang >= %{golang_version}
 BuildRequires: systemd
 BuildRequires: make
-BuildRequires:  golang = 1.18
 
 Requires:       cpuid
 Requires:       kmod
@@ -28,10 +32,9 @@ Requires:       bcc
 %description
 Kubernetes-based Efficient Power Level Exporter
 
-# golang specifics
-%global golang_version 1.18
 
-%global debug_package %{nil} 
+
+
 %prep
 %autosetup
 
