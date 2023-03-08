@@ -7,7 +7,7 @@ Summary:        Kepler Binary
 
 License:        Apache License 2.0
 URL:            https://github.com/sustainable-computing-io/kepler/
-Source0:        https://github.com/sustainable-computing-io/kepler/archive/refs/tags/%{_VERSION_}.tar.gz
+Source0:        https://github.com/husky-parul/kepler/archive/refs/tags/%{_VERSION_}.tar.gz
 
 
 
@@ -15,7 +15,6 @@ BuildRequires: gcc
 BuildRequires: systemd
 BuildRequires: make
 BuildRequires:  golang = 1.18
-
 
 Requires:       cpuid
 Requires:       kmod
@@ -68,5 +67,5 @@ install -p -m644 ./packaging/systemd/kepler.service %{buildroot}%{_unitdir}/kepl
 
 
 %changelog
-* %{_TIMESTAMP_} %{_COMMITTER_} 
-- %{_CHANGELOG_}
+* Wed Mar 08 2023 Parul Singh <parsingh@redhat.com> 0.4.0
+- Initial packaging
