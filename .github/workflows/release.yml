@@ -59,9 +59,6 @@ jobs:
 
           echo "%global _VERSION_ ${{ github.event.inputs.tag }}" | cat - packaging/rpm/kepler_build.spec > temp && mv temp packaging/rpm/kepler_build.spec
           echo "%global _RELEASE_ ${{ github.event.inputs.release }}" | cat - packaging/rpm/kepler_build.spec > temp && mv temp packaging/rpm/kepler_build.spec
-          echo "%global _COMMITTER_ ${{ steps.data.outputs.commitId }}" | cat - packaging/rpm/kepler_build.spec > temp && mv temp packaging/rpm/kepler_build.spec
-          echo "%global _TIMESTAMP_ ${{ steps.data.outputs.date }}" | cat - packaging/rpm/kepler_build.spec > temp && mv temp packaging/rpm/kepler_build.spec
-          echo "%global _CHANGELOG_ ${{ steps.data.output.message }}" | cat - packaging/rpm/kepler_build.spec > temp && mv temp packaging/rpm/kepler_build.spec
 
           ls -la packaging/rpm/kepler_build.spec
 

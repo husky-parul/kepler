@@ -68,5 +68,5 @@ install -p -m644 ./packaging/systemd/kepler.service %{buildroot}%{_unitdir}/kepl
 
 
 %changelog
-* %{_TIMESTAMP_} %{_COMMITTER_} 
-- %{_CHANGELOG_}
+* Wed Mar 08 2023 Parul Singh <parsingh@redhat.com> 0.4.0
+- Initial packaging
