@@ -94,6 +94,6 @@ networks:
   #    --subnet=192.168.124.0/24 \
   #    -o parent=virbr0 virt-net
   #
-  virt-net:
-    name: virt-net
-    external: true
+  # virt-net:
+  #   name: virt-net
+  #   external: true
