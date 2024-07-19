@@ -1,0 +1,9 @@
+services: 
+  prometheus:
+    networks:
+      - kepler-network
+      
+    volumes:
+      - type: bind
+        source: ../validation/metal/prometheus/scrape-configs/metal.yaml
+        target: /etc/prometheus/scrape-configs/metal.yaml

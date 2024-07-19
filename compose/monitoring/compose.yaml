@@ -1,0 +1,21 @@
+name: monitoring
+
+services:
+  prometheus:
+    build:
+      context: ./prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - prom-data:/prometheus
+      - type: bind
+        source: ./prometheus/prometheus.yml
+        target: /etc/prometheus/prometheus.yml
+    networks:
+      - monitoring
+volumes:
+  # volume for holding prometheus (ts)db
+  prom-data:
+
+networks:
+  monitoring:
